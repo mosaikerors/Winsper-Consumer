@@ -19,17 +19,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
   @Autowired
-  private UserService userService;;
+  private UserService userService;
 
-  @RequestMapping(value = "/sendCode", method = RequestMethod.GET)
-  public ResponseEntity<JSONObject> sendCode(HttpServletRequest request, String phone){
-    JSONObject result=userService.sendCode(request, phone);
+  @RequestMapping(value = "/sendCode", method = RequestMethod.POST)
+  public ResponseEntity<JSONObject> sendCode(@RequestBody JSONObject request){
+    JSONObject result=userService.sendCode(request);
     return new ResponseEntity<>(result,HttpStatus.OK);
   }
 
   @RequestMapping(value = "/signup", method = RequestMethod.POST)
-  public ResponseEntity<JSONObject> signup(HttpSession session ,@RequestBody JSONObject request){
-    JSONObject result=userService.signup(session,request);
+  public ResponseEntity<JSONObject> signup(@RequestBody JSONObject request){
+    JSONObject result=userService.signup(request);
     return new ResponseEntity<>(result,HttpStatus.OK);
   }
 
@@ -40,8 +40,9 @@ public class UserController {
   }
 
   @RequestMapping(value = "/updateInfo", method = RequestMethod.PUT)
-  public ResponseEntity<JSONObject>  updateInfo(@RequestHeader String token,@RequestBody JSONObject request){
-    JSONObject result=userService.updateInfo(token,request);
+  public ResponseEntity<JSONObject>  updateInfo(@RequestHeader("Authorization") String token,@RequestBody JSONObject request){
+    request.put("token", token);
+    JSONObject result=userService.updateInfo(request);
     return new ResponseEntity<>(result,HttpStatus.OK);
   }
 
