@@ -6,12 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
@@ -28,17 +23,17 @@ public class HeanController {
     return new ResponseEntity<>(heanList, HttpStatus.OK);
   }
 
-  @RequestMapping(value = "/{uId}", method = RequestMethod.POST)
+  @RequestMapping(value = "/byUId", method = RequestMethod.POST)
   @ResponseBody
-  public ResponseEntity<JSONObject> searchByUser(@PathVariable(value = "uId") Long uId) {
-    JSONObject heanList = heanService.findAllByUId(uId);
+  public ResponseEntity<JSONObject> searchByUser(@RequestBody JSONObject param) {
+    JSONObject heanList = heanService.findAllByUId(param);
     return new ResponseEntity<>(heanList, HttpStatus.OK);
   }
 
 
-  @RequestMapping(value = "/delete/{hId}", method = RequestMethod.POST)
-  public ResponseEntity<JSONObject> deleteByHId(@PathVariable(value = "hId") String hId) {
-    JSONObject result = heanService.deleteHean(hId);
+  @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+  public ResponseEntity<JSONObject> deleteByHId(@RequestBody JSONObject param) {
+    JSONObject result = heanService.deleteHean(param);
     return new ResponseEntity<>(result, HttpStatus.OK);
   }
 
@@ -48,7 +43,7 @@ public class HeanController {
       @RequestParam(value = "pictures") MultipartFile[] files,
       @RequestParam(value = "uId") Long uId, @RequestParam(value = "text") String text,
       @RequestParam(value = "location") String location) {
-    JSONObject result = heanService.uploadPicture(files, uId, text, location);
+    JSONObject result = heanService.uploadHean(files, uId, text, location);
     return new ResponseEntity<>(result, HttpStatus.OK);
   }
 
