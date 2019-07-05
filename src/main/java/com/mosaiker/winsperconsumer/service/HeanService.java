@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 @Primary  // 因为引入 fallback 类，出现两个同类 Bean，所以不加 @Primary 会导致 @Autowired 有红色波浪线（尽管不影响运行）
-@FeignClient(value = "hean-service", path = "/hean")
+@FeignClient(value = "hean-service", path = "/hean", fallback = HeanServiceHystric.class)
 //@RequestMapping(value = "/hean")  // 这里 url 公共的部分不能用 RequestMappnig，要用 @FeignClient 的 path 属性
 public interface HeanService {
 
